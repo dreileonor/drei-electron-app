@@ -8,8 +8,18 @@ interface Props {
 }
 
 export default function FloatingCard({ anime, onClick }: Props) {
+  const largeUrl = anime.images?.jpg?.large_image_url
+  const fallbackUrl = anime.images?.jpg?.image_url
+  const [imgSrc, setImgSrc] = useState(largeUrl || fallbackUrl || '')
   const [imgError, setImgError] = useState(false)
-  const posterUrl = anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url
+
+  const handleImgError = () => {
+    if (imgSrc === largeUrl && fallbackUrl && fallbackUrl !== largeUrl) {
+      setImgSrc(fallbackUrl)
+    } else {
+      setImgError(true)
+    }
+  }
 
   const displayTitle = anime.title_english || anime.title
 
@@ -20,12 +30,12 @@ export default function FloatingCard({ anime, onClick }: Props) {
       onClick={onClick}
     >
       {/* Poster or CSS fallback */}
-      {!imgError && posterUrl ? (
+      {!imgError && imgSrc ? (
         <img
-          src={posterUrl}
+          src={imgSrc}
           alt={displayTitle}
           className="absolute inset-0 w-full h-full object-cover"
-          onError={() => setImgError(true)}
+          onError={handleImgError}
           draggable={false}
         />
       ) : (

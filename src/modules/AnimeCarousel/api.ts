@@ -9,12 +9,7 @@ export async function fetchCurrentSeasonAnime(): Promise<AnimeData[]> {
     params: { limit: 25, sfw: true },
     timeout: 12000,
   })
-  const list = data.data as AnimeData[]
-  console.log('[API] total entries:', list.length)
-  list.forEach((a, i) =>
-    console.log(`[API] #${i} ${a.title} | jpg:`, a.images?.jpg?.image_url ?? 'MISSING')
-  )
-  return list
+  return data.data as AnimeData[]
 }
 
 // --- Episode list (paginated) ---
